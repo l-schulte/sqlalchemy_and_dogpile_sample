@@ -22,6 +22,16 @@ from dogpile.cache.api import NO_VALUE
 from sqlalchemy.orm.interfaces import MapperOption
 from sqlalchemy.orm.query import Query
 
+from hashlib import md5
+
+
+def md5_key_mangler(key):
+    """Receive cache keys as long concatenated strings;
+    distill them into an md5 hash.
+
+    """
+    return md5(key.encode('ascii')).hexdigest()
+
 
 class CachingQuery(Query):
     """A Query subclass which optionally loads full results from a dogpile
